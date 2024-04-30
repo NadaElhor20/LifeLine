@@ -1,0 +1,18 @@
+{
+    "firstName": "test",
+    "lastName": "ex",
+    "email": "test.ex@example.com",
+    "password": "password123",
+    "birthDate": "2000-01-01", 
+    "gender": "m", 
+    "phone": "01234567890", 
+    "bloodType": "A+", 
+    "disease": "None", 
+    "donationTimes": 0, 
+    "gov": "cairo", 
+    "city": "douki", 
+    "receivedHistory": {
+        "receivedBloodType": "O+", 
+        "receivedBloodDate": "2023-01-01" 
+    }
+}
