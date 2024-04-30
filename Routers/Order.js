@@ -10,9 +10,6 @@ const { AuthorizedActor } = require('../middleware/authorization.js');
 const { validateOrderData } = require('../middleware/validateData');
 const customError = require('../Helper/ErrorHandler.js');
 
-// router.get('/', AuthorizedActor, async (req, res) => {
-//   res.status(200).send('allOrders');
-// });
 router.post('/Add', AuthorizedActor, validateOrderData, async (req, res) => {
   let newOrder;
   const { bloodGroup, bloodBankID, hospitalID, from, to } = req.body;
@@ -119,41 +116,43 @@ router.patch('/changeStatus', AuthorizedActor, async (req, res) => {
   }
   res.status(200).send('Order status updated successfully');
 });
-// router.get('/bagsLists', AuthorizedActor, async (req, res) => {
-//   const { userID, hospitalID, bloodBankID } = req.query;
-//   let donatedBagsList, mappedDonatedBagsList;
-//   if (userID) {
-//     donatedBagsList = await Donate.find({ userID }).populate([
-//       { path: 'hospitalID', select: ['name', 'addressDescription', 'phone'] },
-//       { path: 'bloodBankID', select: ['name', 'addressDescription', 'phone'] },
-//     ]);
-//     mappedDonatedBagsList = _.map(donatedBagsList, ({ donationDate, hospitalID, bloodBankID }) => ({
-//       donationDate,
-//       hospital: _.pick(hospitalID, ['name', 'phone', 'addressDescription']),
-//       bloodBank: _.pick(bloodBankID, ['name', 'phone', 'addressDescription']),
-//     }));
-//   } else if (hospitalID) {
-//     donatedBagsList = await Donate.find({ hospitalID }).populate('userID', ['firstName', 'lastName', 'phone', 'bloodType']);
-//     mappedDonatedBagsList = _.map(donatedBagsList, ({ donationDate, userID }) => {
-//       const fullName = `${userID.firstName} ${userID.lastName}`;
-//       return {
-//         donationDate,
-//         ..._.pick(userID, ['phone', 'bloodType']),
-//         fullName,
-//       };
-//     });
-//   } else if (bloodBankID) {
-//     donatedBagsList = await Donate.find({ bloodBankID }).populate('userID', ['firstName', 'lastName', 'phone', 'bloodType']);
-//     mappedDonatedBagsList = _.map(donatedBagsList, ({ donationDate, userID }) => {
-//       const fullName = `${userID.firstName} ${userID.lastName}`;
-//       return {
-//         donationDate,
-//         ..._.pick(userID, ['phone', 'bloodType']),
-//         fullName,
-//       };
-//     });
-//   }
-//   res.status(200).send(mappedDonatedBagsList);
-// });
+router.get('/ordersList', AuthorizedActor, async (req, res) => {
+  const { hospitalID, bloodBankID } = req.query;
+  const query = hospitalID ? { hospitalID } : { bloodBankID };
+  const orders = await Order.find(query).populate([
+    { path: 'hospitalID', select: ['name', 'addressDescription', 'phone'] },
+    { path: 'bloodBankID', select: ['name', 'addressDescription', 'phone'] },
+  ]);
+  mappedOrders = _.map(orders, ({ createdAt, bloodBankID, hospitalID, from, to, status, _id: orderID }) => ({
+    orderID,
+    createdAt,
+    from,
+    to,
+    status,
+    hospital: _.pick(hospitalID, ['name', 'phone', 'addressDescription']),
+    bloodBank: _.pick(bloodBankID, ['name', 'phone', 'addressDescription']),
+  }));
+
+  res.status(200).send(mappedOrders);
+});
+router.get('/', AuthorizedActor, async (req, res) => {
+  const { orderID } = req.query;
+
+  const orders = await Order.findById(orderID).populate([
+    { path: 'hospitalID', select: ['name', 'addressDescription', 'phone'] },
+    { path: 'bloodBankID', select: ['name', 'addressDescription', 'phone'] },
+  ]);
+  mappedOrders = _.map(orders, ({ createdAt, bloodBankID, hospitalID, from, to, status, _id: orderID }) => ({
+    orderID,
+    createdAt,
+    from,
+    to,
+    status,
+    hospital: _.pick(hospitalID, ['name', 'phone', 'addressDescription']),
+    bloodBank: _.pick(bloodBankID, ['name', 'phone', 'addressDescription']),
+  })).filter((order) => !_.isEmpty(order.hospital) && !_.isEmpty(order.bloodBank));
+
+  res.status(200).send(mappedOrders[0]);
+});
 
 module.exports = router;
