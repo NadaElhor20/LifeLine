@@ -24,7 +24,7 @@ router.post('/signIn', async (req, res) => {
   if (!match) throw new customError('invalid email or password', 401);
   const token = await hospital.generateToken();
   console.info('hospital login successfully');
-  res.status(200).send({ token, hospitalID: hospital._id });
+  res.status(200).send({ token, hospitalID: hospital._id ,isOwner:hospital.isOwner});
 });
 
 router.get('/profile', AuthorizedHospital, async (req, res) => {

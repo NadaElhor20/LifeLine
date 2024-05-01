@@ -24,7 +24,7 @@ router.post('/signIn', async (req, res) => {
   if (!match) throw new customError('invalid email or password', 401);
   const token = await bloodBank.generateToken();
   console.info('BloodBank login successfully');
-  res.status(200).send({ token, bloodBankID: bloodBank._id });
+  res.status(200).send({ token, bloodBankID: bloodBank._id ,isOwner:bloodBank.isOwner});
 });
 
 router.get('/profile', AuthorizedBloodBank, async (req, res) => {
