@@ -7,6 +7,7 @@ const hospitalRouter = require('./Routers/Hospital');
 const bloodBankRouter=require("./Routers/BloodBank");
 const donationRouter = require('./Routers/BloodBag');
 const orderRouter = require('./Routers/Order');
+const bloodDriveRouter = require('./Routers/BloodDrive');
 const errorController = require('./Helper/errorController');
 
 app.use(express.json());
@@ -16,6 +17,7 @@ app.use(['/hospital', '/hospitals'], hospitalRouter);
 app.use(['/bloodBank', '/bloodBanks'], bloodBankRouter);
 app.use(['/donate'], donationRouter);
 app.use(['/order'], orderRouter);
+app.use(['/bloodDrive'], bloodDriveRouter);
 app.use(errorController);
 
 app.listen(port, () => {

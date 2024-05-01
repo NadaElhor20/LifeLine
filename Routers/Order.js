@@ -7,10 +7,10 @@ const Hospital = require('../Models/hospital.js');
 const BloodBank = require('../Models/bloodBank.js');
 const Order = require('../Models/order.js');
 const { AuthorizedActor } = require('../middleware/authorization.js');
-const { validateOrderData } = require('../middleware/validateData');
+const { validateData } = require('../middleware/validateData');
 const customError = require('../Helper/ErrorHandler.js');
 
-router.post('/Add', AuthorizedActor, validateOrderData, async (req, res) => {
+router.post('/Add', AuthorizedActor, validateData, async (req, res) => {
   let newOrder;
   const { bloodGroup, bloodBankID, hospitalID, from, to } = req.body;
   const bloodGroupData = to === 'hospital' ? await Hospital.findById(hospitalID, { bloodGroup: 1 }) : await BloodBank.findById(bloodBankID, { bloodGroup: 1 });
