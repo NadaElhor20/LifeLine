@@ -1,5 +1,5 @@
 require('dotenv').config();
-const RequiredEnv = ['JWT_SECRET', 'DB_URL', 'PORT', 'MOBILE_REGEX','LAND_PHONE_REGEX','PASSWORD_REGEX','CRITICAL_DISEASES','GOV_PATTERN','CITY_PATTERN'];
+const RequiredEnv = ['MAIL_REGEX','JWT_SECRET', 'DB_URL', 'PORT', 'MOBILE_REGEX','LAND_PHONE_REGEX','PASSWORD_REGEX','CRITICAL_DISEASES','GOV_PATTERN','CITY_PATTERN'];
 
 const missedEnv = RequiredEnv.filter((envName) => !process.env[envName]);
 
@@ -15,5 +15,6 @@ module.exports = {
   passwordRegex: process.env.PASSWORD_REGEX,
   criticalDiseases:process.env.CRITICAL_DISEASES,
   govPattern:process.env.GOV_PATTERN,
-  cityPattern:process.env.CITY_PATTERN
+  cityPattern:process.env.CITY_PATTERN,
+  mailRegex:process.env.MAIL_REGEX
 };

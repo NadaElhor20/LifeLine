@@ -1,6 +1,6 @@
 const Joi = require('joi');
 const customError = require('../Helper/ErrorHandler.js');
-const { passwordRegex, landPhoneRegex, govPattern } = require('../config.js');
+const { passwordRegex, landPhoneRegex, govPattern,mailRegex } = require('../config.js');
 const bloodTypes = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
 
 const schemaForPost = Joi.object({
@@ -8,7 +8,7 @@ const schemaForPost = Joi.object({
     'any.required': 'First name is required',
     'string.empty': 'First name cannot be empty',
   }),
-  email: Joi.string().email().required().messages({
+  email: Joi.string().email().pattern(new RegExp(mailRegex)).required().messages({
     'any.required': 'Email is required',
     'string.email': 'Email must be a valid email address',
     'string.empty': 'Email cannot be empty',

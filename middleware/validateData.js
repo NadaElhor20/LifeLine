@@ -6,12 +6,17 @@ const validateData = async (req, res, next) => {
 
   try {
     // Define required fields based on the baseUrl
-    const requiredFields = baseUrl === '/order' ?
-      ['bloodGroup', 'bloodBankID', 'hospitalID', 'from', 'to'] :
-      ['startDate', 'endDate', 'phone', 'description', 'bloodBankID'];
+    let requiredFields;
+    if (baseUrl === '/order') {
+      requiredFields = ['bloodGroup', 'bloodBankID', 'hospitalID', 'from', 'to'];
+    } else if (baseUrl === '/bloodDrive') {
+      requiredFields = ['startDate', 'endDate', 'phone', 'description', 'bloodBankID'];
+    } else if (baseUrl === '/argentCall') {
+      requiredFields = ['hospitalID', 'gov', 'city', 'description', 'createDate', 'bloodGroup'];
+    }
 
     // Check for missing fields
-    const missingFields = requiredFields.filter(field => !requestBody.hasOwnProperty(field));
+    const missingFields = requiredFields.filter((field) => !requestBody.hasOwnProperty(field));
 
     if (missingFields.length > 0) {
       throw new customError(`Missing required fields: ${missingFields.join(', ')}`, 400);
