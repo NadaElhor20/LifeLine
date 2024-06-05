@@ -3,7 +3,7 @@ const RequiredEnv = ['MAIL_REGEX','JWT_SECRET', 'DB_URL', 'PORT', 'MOBILE_REGEX'
 
 const missedEnv = RequiredEnv.filter((envName) => !process.env[envName]);
 
-if (missedEnv.length) throw new Error(`The Enviroment variables not found ${missedEnv}`);
+if (missedEnv.length) throw new Error(`The Environment variables not found ${missedEnv}`);
 
 module.exports = {
   privateKey: process.env.JWT_SECRET,
