@@ -24,7 +24,7 @@ router.post('/signIn', async (req, res) => {
   if (!match) throw new customError('invalid email or password', 401);
   const token = await hospital.generateToken();
   console.info('hospital login successfully');
-  res.status(200).send({ token, hospitalID: hospital._id ,isOwner:hospital.isOwner});
+  res.status(200).send({ token, hospitalID: hospital._id, isOwner: hospital.isOwner });
 });
 
 router.get('/profile', AuthorizedHospital, async (req, res) => {
@@ -68,13 +68,13 @@ router.patch('/:id', validateUpdatedHospital, AuthorizedHospital, async (req, re
 });
 
 router.get('/lists', async (req, res) => {
-  let gov, city;
+  let gov;
   const { userID, hospitalID, bloodBankID } = req.query;
-  if (userID) ({ gov, city } = await User.findById(userID));
-  if (hospitalID) ({ gov, city } = await Hospital.findById(hospitalID));
+  if (userID) ({ gov } = await User.findById(userID));
+  if (hospitalID) ({ gov } = await Hospital.findById(hospitalID));
   if (bloodBankID) ({ gov } = await BloodBank.findById(bloodBankID));
-  const searchCriteria = bloodBankID ? { gov } : { gov, city };
-  const hospitalList = await Hospital.find(searchCriteria);
+  // const searchCriteria = userID ? { gov, city } : { gov };
+  const hospitalList = await Hospital.find({gov});
   res.status(200).send(hospitalList);
 });
 
