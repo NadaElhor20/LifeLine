@@ -9,12 +9,13 @@ const customError = require('../Helper/ErrorHandler.js');
 
 router.get('/', AuthorizedActor, async (req, res) => {
   const argentCallList = await ArgentCall.find({}).populate([{ path: 'hospitalID', select: ['name', 'addressDescription', 'phone'] }]);
-  mappedArgentCall = _.map(argentCallList, ({ hospitalID, gov, city, description, createDate, bloodGroup }) => ({
+  mappedArgentCall = _.map(argentCallList, ({ _id:ArgentCallID,hospitalID, gov, city, description, createDate, bloodGroup }) => ({
     gov,
     city,
     description,
     createDate,
     bloodGroup,
+    ArgentCallID,
     hospital: _.pick(hospitalID, ['name', 'phone', 'addressDescription']),
   }));
   res.status(200).send(mappedArgentCall);
