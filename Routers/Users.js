@@ -4,7 +4,7 @@ const _ = require('lodash');
 const router = express.Router();
 const User = require('../Models/user');
 const { validateRegisteredUser, validateUpdatedUser, calculateAge } = require('../Controllers/users');
-const { AuthorizedUser } = require('../middleware/authorization');
+const { AuthorizedUser,AuthorizedActor } = require('../middleware/authorization');
 const customError = require('../Helper/ErrorHandler.js');
 
 router.post('/', validateRegisteredUser, async (req, res) => {
@@ -77,7 +77,7 @@ router.patch('/:id', validateUpdatedUser, AuthorizedUser, async (req, res) => {
   res.send({ updated });
 });
 
-router.get('/Heros', AuthorizedUser, async (req, res) => {
+router.get('/Heros', AuthorizedActor, async (req, res) => {
   const { filter } = req.query;
   let query = {};
 
